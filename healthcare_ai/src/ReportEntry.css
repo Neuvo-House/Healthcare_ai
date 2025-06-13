@@ -1,0 +1,134 @@
+/* Main container for the report entry section */
+.report-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+/* Container for image and content sections */
+.report-entry-container {
+  display: flex;
+  height: max-content;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  gap: 50px;
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+/* Decorative radial circle behind the image */
+.radial-circle {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 60%;
+  margin-left: 10px;
+  margin-top: 60px;
+  /* Only show the top part of the circle */
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 80%);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(184, 192, 230, 1) 100%
+  );
+  transform: scale(1.6);
+}
+
+/* Image container with custom scaling and positioning */
+.report-entry-image{
+  display: flex;
+  align-items:center ;
+  justify-content: center;
+  position: relative;
+  width: 700px;
+  height: 550px;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 3;
+  /* Flip the image horizontally and adjust position */
+  transform: scaleX(-1.1);
+  margin-top: -90px;
+  margin-left: -100px;
+}
+
+/* Style for the health image */
+.report-entry-image img {
+  object-fit: cover;
+  margin-top: 640px;
+  height: 800px;
+  transform: scale(1.6);
+}
+
+/* Content box for text and button */
+.report-entry-content {
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 30px 28px;
+  display: flex;
+  max-width: 240px;
+}
+
+/* Container for text elements */
+.text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Paragraph styles within text content */
+.text-content p {
+  line-height: 1.5;
+  color: #222;
+  font-family: 'unbound-regular', sans-serif;
+  font-size: 14px;
+}
+
+/* Button styles within text button container */
+.text-button button {
+  background-color: #111;
+  color: #fff;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.text-button button:hover {
+  background-color: #333;
+}
+
+/* Responsive styles for smaller screens */
+@media screen and (max-width: 768px) {
+  .report-entry-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .report-entry-image img {
+    width: 350px;
+    height: 450px;
+    margin-left: 0;
+  }
+
+  .report-entry-content {
+    max-width: 90%;
+  }
+
+  .gradient-circle {
+    width: 350px;
+    height: 350px;
+  }
+}

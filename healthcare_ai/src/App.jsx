@@ -5,8 +5,9 @@ function App() {
 
 
   return (
-    <>
-    </>
+    <div className="main-container">
+      
+    </div>
   )
 }
 

@@ -1,4 +1,6 @@
 .main-container{
-    background-color: white;
+    border: solid 5px #ffffff;
+    border-radius: 26px;
+    height: 200vh;
     
 }

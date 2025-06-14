@@ -1,7 +1,7 @@
 
 import React from "react";
 import { IoArrowForward } from "react-icons/io5";
-import robortImage from "./assets/health.png";
+import robotImage from "./assets/health.png";
 import "./ReportEntry.css";
 
 function ReportEntry({ onSendReports }) {
@@ -11,7 +11,7 @@ function ReportEntry({ onSendReports }) {
         <div className="image-section">
           <div className="report-entry-image">
             <img
-              src={robortImage}
+              src={robotImage}
               alt="Health Report"
             />
           </div>

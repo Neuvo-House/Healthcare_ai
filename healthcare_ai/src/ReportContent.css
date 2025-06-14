@@ -30,6 +30,7 @@
   position: relative;
   width: 100%;
   max-width: 700px;
+  height:1400px;
   animation: floatIn 1s ease-out forwards;
 }
 
@@ -50,14 +51,17 @@
   justify-content: center;
   position: relative;
   width: 100%;
-  max-width: 700px;
   height: 100%;
   border-radius: clamp(12px, 2vw, 20px);
   overflow: hidden;
   z-index: 3;
-  margin-top: clamp(-100px, -15vw, -250px);
-  margin-left: clamp(-10px, -2vw, -20px);  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               margin 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.report-making-image img {
+  /* Increase the scale for a larger image */
+  transform: scale(1.2);
 }
 
 .report-making-image::before {
@@ -89,7 +93,7 @@
   object-fit: cover;
   margin-top: clamp(-15px, -2vw, -30px);
   height: clamp(400px, 60vw, 650px);
-  transform: scale(0.9);
+  /* Removed transform: scale(0.9); to avoid overriding the previous scale */
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
   will-change: transform;
@@ -323,6 +327,7 @@
 html {
   scroll-behavior: smooth;
 }
+
 
 /* Better touch response for mobile */
 @media (hover: none) {
@@ -769,13 +774,14 @@ html {
 /* Back button styling */
 .back-button-container {
   padding: 20px 0 10px;
-  margin-top: 20px;
+  margin-top: -80px;
   width: 100%;
   display: flex;
   justify-content: center;
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+  
 }
 
 .back-button {
@@ -796,6 +802,7 @@ html {
   position: relative;
   overflow: hidden;
   min-width: 200px;
+  
 }
 
 .back-button:hover {

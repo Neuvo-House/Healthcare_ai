@@ -182,7 +182,7 @@ function ReportMaking({ onGoBack }) {
         </div>
       </div>
       <div className="back-button-container">
-        <button className="back-button" onClick={onGoBack}>
+        <button className="back-button" onClick={onGoBack} >
           <IoArrowBack /> Back to Information
         </button>
       </div>

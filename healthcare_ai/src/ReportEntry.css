@@ -36,7 +36,7 @@
   z-index: 3;
   /* Flip the image horizontally and adjust position */
   transform: scaleX(-1.1);
-  margin-top: -90px;
+  margin-top: 250px;
   margin-left: -100px;
 }
 
@@ -56,9 +56,11 @@
   box-shadow: 10px 10px 30px rgba(255, 255, 255, 0.2);
   padding: 30px 28px;
   display: flex;
-  max-width: 440px;
-  min-height: 400px;
-  margin-right: 200px;
+  min-width: 450px;
+  max-width: 600px;
+  min-height: 500px;
+  margin-right: 400px;
+  margin-top: 250px;
   transition: all 0.3s ease;
 }
 
@@ -73,10 +75,10 @@
 
 /* Paragraph styles within text content */
 .text-content p {
-  line-height: 1.5;
+  line-height: 2;
   color: #222;
   font-family: 'unbound-regular', sans-serif;
-  font-size: 20px;
+  font-size: 80px;
 }
 
 /* Button styles within text button container */

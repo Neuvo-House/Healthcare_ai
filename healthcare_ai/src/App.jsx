@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Navbar from './Navbar'
-import ReportEntry from './ReportEntry'
+import ReportMaking from './ReportContent'
+// import Hero from './hero'
+// import ReportEntry from './ReportEntry'
 import './App.css'
 
 function App() {
@@ -9,7 +11,9 @@ function App() {
   return (
     <div className="main-container">
       <Navbar />
-      <ReportEntry />
+      {/* <Hero /> */}
+      {/* <ReportEntry /> */}
+      <ReportMaking />
     </div>
   )
 }

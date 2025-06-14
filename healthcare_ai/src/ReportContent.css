@@ -17,8 +17,22 @@
   overflow: visible;
 }
 
-
-
+.radial-circle {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 100%;
+  margin-left: 90px;
+  margin-top: -100px;
+  z-index: 0;
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(184, 192, 230, 1) 100%
+  );
+  transform: scale(1.8);
+}
 .report-making-image {
   display: flex;
   align-items: center;
@@ -29,32 +43,59 @@
   border-radius: 20px;
   overflow: hidden;
   z-index: 3;
-  margin-top: -110px;
-  margin-left: -180px;
+  margin-top: -250px;
+  margin-left: -20px;
 }
 
 .report-making-image img {
   object-fit: cover;
-  margin-top: 100px;
+  margin-top: -30px;
   height: 650px;
-  transform: scale(0.9)
+  transform: scale(0.9);
 }
 
 .report-making-content {
   border-radius: 30px;
-  background-color: #fff;
+  background-color: rgba(245, 245, 245, 0.42);
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
   padding: 30px 28px;
+  margin-top: 10px;
   display: flex;
-  max-width: 240px;
+  border: 3px solid white;
+  
 }
 
 .text-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  min-width: 100px;
+  gap: 5px;  
+}
+.input-container {
+  width: 400px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #c5c9f3;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
 }
 
+.facloudarrowup {
+  font-size: 2rem;
+  color: #4a4eaf;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.facloudarrowup:hover {
+  color: #222b6b;
+}
 
 @media screen and (max-width: 768px) {
   .report-making-container {

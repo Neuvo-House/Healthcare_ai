@@ -3,12 +3,12 @@ import React from "react";
 import { IoArrowForward } from "react-icons/io5";
 import robortImage from "./assets/health.png";
 import "./ReportEntry.css";
-function ReportEntry() {
+
+function ReportEntry({ onSendReports }) {
   return (
     <div className="report-entry">
       <div className="report-entry-container">
         <div className="image-section">
-          <div className="radial-circle"/>
           <div className="report-entry-image">
             <img
               src={robortImage}
@@ -29,7 +29,9 @@ function ReportEntry() {
               </p>
             </div>
             <div className="text-button">
-              <button >Send your Reports <IoArrowForward /></button>
+              <button onClick={onSendReports} className="send-reports-btn">
+                Send your Reports <IoArrowForward className="arrow-icon" />
+              </button>
             </div>
           </div>
         </div>

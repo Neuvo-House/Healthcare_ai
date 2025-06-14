@@ -22,23 +22,6 @@
   overflow: visible;
 }
 
-/* Decorative radial circle behind the image */
-.radial-circle {
-  position: absolute;
-  width: 360px;
-  height: 360px;
-  border-radius: 100%;
-  margin-left: 170px;
-  margin-top: 90px;
-  /* Only show the top part of the circle */
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(184, 192, 230, 1) 100%
-  );
-  transform: scale(1.6);
-}
 
 /* Image container with custom scaling and positioning */
 .report-entry-image{
@@ -68,8 +51,9 @@
 /* Content box for text and button */
 .report-entry-content {
   border-radius: 30px;
-  background-color: #fff;
-  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  background-color: transparent;
+  border: solid 1px rgba(255, 255, 255, 0.671);
+  box-shadow: 10px 10px 30px rgba(255, 255, 255, 0.2);
   padding: 30px 28px;
   display: flex;
   max-width: 440px;
@@ -115,12 +99,46 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
 }
 
 /* Button hover effect */
 .text-button button:hover {
   background-color: #333;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.text-button button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Button icon animation */
+.text-button button .arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.text-button button:hover .arrow-icon {
+  transform: translateX(5px);
+}
+
+/* Button animation effect */
+.text-button button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
+}
+
+.text-button button:hover::after {
+  left: 100%;
 }
 
 /* Extra Large screens */

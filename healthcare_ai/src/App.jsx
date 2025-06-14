@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import Navbar from './Navbar'
-import ReportMaking from './ReportContent'
+//import ReportMaking from './ReportContent'
 // import Hero from './hero'
-// import ReportEntry from './ReportEntry'
+//import ReportEntry from './ReportEntry'
+import HealthcareAI from './ai'
 import './App.css'
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
       <Navbar />
       {/* <Hero /> */}
       {/* <ReportEntry /> */}
-      <ReportMaking />
+      {<HealthcareAI />}
+      {/* <ReportMaking /> */}
     </div>
   )
 }

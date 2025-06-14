@@ -10,8 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -100px;
-    margin-left: 390px;
+    margin-left: 550px;
 }
 .robot-image{
     position: relative;
@@ -108,7 +107,10 @@
     justify-content: center;
     width: fit-content;
     position: relative;
-    margin-top: 300px;
+    margin-top: 200px;
+}
+.testimonials-text{
+    margin-left: 90px;
 }
 .images{
     display: flex;
@@ -147,9 +149,6 @@
 .fourth {   
     z-index: 4;
 
-}
-.testimonials-text{
-    margin-left: 50px;
 }
 .bold {
     font-weight: 900;
@@ -207,4 +206,473 @@
     font-size: 24px;
     text-align: center;
     border-radius: inherit;
+}
+/* Tablet */
+@media (max-width: 1024px) {
+    .hero-container {
+        flex-direction: column;
+        padding-top: 60px;
+        height: auto;
+        align-items: center;
+    }
+
+    .left, .right {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .left-text {
+        padding: 0 40px;
+        margin-top: 60px;
+        text-align: center;
+    }
+
+    .sub_heading {
+        font-size: 36px;
+    }
+
+    .para {
+        font-size: 14px;
+    }
+
+    .robot-image {
+        width: 100%;
+        height: auto;
+        margin-top: 0;
+    }
+
+    .robot-image img {
+        width: 100%;
+        height: auto;
+        margin-top: 0;
+        transform: scale(1);
+    }
+
+    .testmonials {
+        flex-direction: column;
+        margin-top: 100px;
+    }
+
+    .images {
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    .testimonials-text {
+        margin-left: 0;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .about {
+        margin: 2rem 0 0 0;
+        position: static;
+        padding: 15px;
+        width: 90%;
+    }
+
+    .firstabout,
+    .secondabout {
+        min-width: auto;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .about-text {
+        font-size: 18px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .box-heading {
+        font-size: 18px;
+    }
+
+    .sub_heading {
+        font-size: 28px;
+    }
+
+    .button {
+        font-size: 20px;
+        padding: 10px 8px;
+    }
+
+    .arrow {
+        font-size: 18px;
+    }
+
+    .circles {
+        width: 50px;
+        height: 50px;
+        margin-right: -15px;
+    }
+
+    .about-text {
+        font-size: 16px;
+    }
+
+    .firstabout,
+    .secondabout {
+        height: auto;
+        padding: 10px;
+    }
+}
+
+/* Responsive styles for hero section */
+@media screen and (max-width: 1200px) {
+    .hero-container {
+        flex-direction: column;
+        height: auto;
+        padding-top: 80px;
+    }
+
+    .left {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .left-text {
+        min-width: auto;
+        max-width: 100%;
+        padding: 0 30px;
+        margin-top: 70px;
+        text-align: center;
+    }
+
+    .box-heading {
+        margin: 0 auto;
+    }
+
+    .right {
+        margin-top: 50px;
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .robot-image {
+        width: 90%;
+        height: 700px;
+        margin-top: 0;
+    }
+
+    .robot-image img {
+        width: 100%;
+        height: 100%;
+        margin-top: 200px;
+        transform: scale(1.2);
+    }
+
+    .about {
+        margin-top: 0;
+        margin-right: 0;
+        position: relative;
+        padding: 15px;
+        width: 80%;
+        max-width: 500px;
+        z-index: 10;
+    }
+
+    .firstabout, .secondabout {
+        width: 100%;
+    }
+    
+    .testmonials {
+        margin-top: 60px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .images {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .hero-container {
+        padding-top: 60px;
+    }
+
+    .left-text {
+        padding: 0 20px;
+        margin-top: 50px;
+    }
+
+    .sub_heading {
+        font-size: 36px;
+    }
+
+    .para {
+        font-size: 14px;
+    }
+
+    .robot-image {
+        height: 500px;
+    }
+
+    .robot-image img {
+        margin-top: 150px;
+        transform: scale(1.1);
+    }
+
+    .circles {
+        width: 45px;
+        height: 45px;
+    }
+
+    .about {
+        width: 90%;
+    }
+
+    .testmonials {
+        margin-top: 40px;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .testimonials-text {
+        margin-left: 0;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero-container {
+        padding-top: 40px;
+    }
+
+    .left-text {
+        margin-top: 30px;
+    }
+
+    .box-heading {
+        font-size: 18px;
+    }
+
+    .sub_heading {
+        font-size: 28px;
+    }
+
+    .para {
+        font-size: 12px;
+    }
+
+    .button {
+        font-size: 20px;
+        padding: 8px 5px;
+    }
+
+    .robot-image {
+        height: 400px;
+    }
+
+    .robot-image img {
+        margin-top: 100px;
+        transform: scale(1);
+    }
+
+    .about {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .circles {
+        width: 35px;
+        height: 35px;
+        margin-right: -15px;
+    }
+    
+    .images {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .hero-container {
+        padding-top: 30px;
+    }
+    
+    .left-text {
+        padding: 0 15px;
+        margin-top: 20px;
+    }
+
+    .box-heading {
+        font-size: 16px;
+    }
+
+    .sub_heading {
+        font-size: 24px;
+    }
+
+    .para {
+        font-size: 11px;
+    }
+
+    .button {
+        font-size: 18px;
+        padding: 6px 4px;
+    }
+
+    .robot-image {
+        height: 350px;
+    }
+
+    .robot-image img {
+        margin-top: 80px;
+    }
+
+    .about {
+        padding: 8px;
+    }
+
+    .about-text {
+        font-size: 14px;
+    }
+    
+    .firstabout,
+    .secondabout {
+        padding: 8px;
+    }
+    
+    .circles {
+        width: 30px;
+        height: 30px;
+        margin-right: -12px;
+    }
+    
+    .testimonials-text {
+        font-size: 14px;
+    }
+    
+    .bold, .less-bold {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .box-heading {
+        font-size: 14px;
+    }
+    
+    .sub_heading {
+        font-size: 22px;
+    }
+    
+    .robot-image {
+        height: 300px;
+    }
+    
+    .about-text {
+        font-size: 12px;
+    }
+    
+    .circles {
+        width: 25px;
+        height: 25px;
+        margin-right: -10px;
+    }
+}
+
+/* Extra large screens */
+@media screen and (max-width: 1600px) {
+    .right {
+        margin-left: 450px;
+    }
+    
+    .robot-image {
+        width: 650px;
+    }
+    
+    .about {
+        margin-right: 250px;
+    }
+}
+
+/* Larger desktop screens */
+@media screen and (max-width: 1400px) {
+    .right {
+        margin-left: 350px;
+    }
+    
+    .robot-image {
+        width: 600px;
+        height: 900px;
+    }
+    
+    .robot-image img {
+        margin-top: 400px;
+    }
+    
+    .about {
+        margin-right: 200px;
+        margin-top: 12rem;
+    }
+    
+    .firstabout,
+    .secondabout {
+        min-width: 350px;
+    }
+}
+
+/* Primarily for fixing display issues on specific screen sizes */
+@media screen and (max-width: 1100px) {
+    .right {
+        margin-left: 250px;
+    }
+    
+    .robot-image {
+        width: 550px;
+    }
+    
+    .about {
+        margin-right: 150px;
+    }
+}
+
+/* Between tablet and desktop */
+@media screen and (max-width: 992px) {
+    .hero-container {
+        padding-top: 70px;
+    }
+    
+    .left-text {
+        min-width: auto;
+        max-width: 550px;
+    }
+    
+    .right {
+        margin-left: 200px;
+    }
+    
+    .robot-image {
+        width: 500px;
+        height: 800px;
+    }
+    
+    .robot-image img {
+        margin-top: 350px;
+    }
+    
+    .about {
+        margin-right: 120px;
+        margin-top: 10rem;
+    }
+    
+    .firstabout,
+    .secondabout {
+        min-width: 300px;
+        height: 70px;
+    }
+    
+    .about-text {
+        font-size: 20px;
+    }
 }

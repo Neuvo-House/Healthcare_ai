@@ -4,8 +4,8 @@ import Hero from './Hero'
 import Fotter from './fotter'
 import Navbar from './Navbar'
 import ReportMaking from './ReportContent'
-import { CSSTransition, SwitchTransition } from 'react-transition-group'
-
+// import Hero from './hero'
+// import ReportEntry from './ReportEntry'
 import './App.css'
 
 function App() {
@@ -56,7 +56,7 @@ function App() {
           </CSSTransition>
         </SwitchTransition>
       </div>
-      <Fotter />
+      {/* <Footer /> */}
       
     </div>
   )

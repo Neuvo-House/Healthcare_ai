@@ -9,7 +9,6 @@
   box-sizing: border-box;
   overflow: hidden;
 }
-
 /* Container for image and content sections */
 .report-entry-container {
   display: flex;

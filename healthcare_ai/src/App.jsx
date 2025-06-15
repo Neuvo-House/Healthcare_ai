@@ -23,7 +23,7 @@ function App() {
 
   const handleSendReports = () => {
     setShowReportContent(true)
-    // Scroll to the component position
+    console.log('[App] handleSendReports: Show report content');
     setTimeout(() => {
       window.scrollTo({
         top: document.getElementById('report-section').offsetTop - 100,
@@ -34,7 +34,7 @@ function App() {
 
   const handleGoBack = () => {
     setShowReportContent(false)
-    // Scroll to the component position
+    console.log('[App] handleGoBack: Back to entry');
     setTimeout(() => {
       window.scrollTo({
         top: document.getElementById('report-section').offsetTop - 100,
@@ -44,12 +44,14 @@ function App() {
   }
 
   const handleTextExtracted = (type, text) => {
+    console.log('[App] handleTextExtracted:', type, text);
     setAllExtractedText(prev => ({ ...prev, [type]: text }))
   }
 
   // This function will be called when user submits files
   const handleSubmitFiles = () => {
-    setTriggerReportGen(prev => prev + 1); // increment to trigger effect in ai.jsx
+    setTriggerReportGen(prev => prev + 1);
+    console.log('[App] handleSubmitFiles: Trigger report generation');
   }
 
   return (

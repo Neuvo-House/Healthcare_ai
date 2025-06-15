@@ -1,29 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./ai.css";
 import picture from "./assets/picture.png";
+import { Bar, Line, Pie, Radar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  ArcElement,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import maleAvatar from './assets/face2.png';
+import femaleAvatar from './assets/picture.png';
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, ArcElement, RadialLinearScale, Title, Tooltip, Legend);
 
 function HealthcareAI({ extractedText, triggerReportGen }) {
   // Sample messages array for the chat
   const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "Hi there! I'm your healthcare assistant. How can I help you today?",
-      sender: "bot",
-      time: "10:30 AM"
-    },
-    {
-      id: 2,
-      text: "let's say it does - what happens then?",
-      sender: "you",
-      time: "02:22 AM"
-    },
-    {
-      id: 3,
-      text: "The question of whether androids dream of electric sheep is the title and theme of the novel *Do Androids Dream of Electric Sheep?* by Philip K. Dick. \n\n1. The book explores a world where androids are indistinguishable from humans except for a lack of empathy. The story follows Rick Deckard, a bounty hunter who tracks down rogue androids.",
-      sender: "bot",
-      time: "02:23 AM"
-    }
   ]);
 
   // State for new message input
@@ -54,7 +55,155 @@ function HealthcareAI({ extractedText, triggerReportGen }) {
     return `${hours}:${minutes} ${ampm}`;
   };
 
-  // Handle message sending
+  // Gemini API constants
+  const GEMINI_API_KEY = 'AIzaSyBpbtlJwRWNLlqJmJpKJBo34O_A5AzKKLw';
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+  useEffect(() => {
+    console.log('[HealthcareAI] extractedText changed:', extractedText);
+  }, [extractedText]);
+
+  useEffect(() => {
+    if (triggerReportGen > 0) {
+      setLoadingReport(true);
+      setTimeout(() => {
+        const dummyReport = `{
+  "name": "Amit Sharma",
+  "age": "38",
+  "gender": "Male",
+  "report_date": "2024-06-07",
+  "health_summary": "Amit is in generally good health, but his recent blood test shows slightly elevated cholesterol and borderline blood sugar. His blood pressure is within normal range.",
+  "primary_concerns": "Elevated cholesterol, borderline blood sugar.",
+  "allergies": "No known allergies."
+}`;
+        setReport(dummyReport);
+        setMessages(prev => ([...prev, {
+          id: prev.length + 1,
+          text: '[Health Report Generated]\n' + dummyReport,
+          sender: 'bot',
+          time: getCurrentTime()
+        }]));
+        setLoadingReport(false);
+      }, 7000); // 7 seconds loading
+    }
+    // eslint-disable-next-line
+  }, [triggerReportGen]);
+
+  // Parse the report JSON for display
+  let parsedReport = null;
+  try {
+    parsedReport = report ? JSON.parse(report) : null;
+  } catch (e) {
+    parsedReport = null;
+  }
+
+  // Example health metrics for the graphs
+  const healthMetrics = {
+    labels: ['Cholesterol', 'Blood Sugar', 'Blood Pressure', 'BMI'],
+    datasets: [
+      {
+        label: 'Your Value',
+        data: [230, 110, 120, 25],
+        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+      },
+      {
+        label: 'Normal Max',
+        data: [200, 100, 130, 24],
+        backgroundColor: 'rgba(255, 99, 132, 0.4)',
+      },
+    ],
+  };
+
+  const lineData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'Blood Sugar (mg/dL)',
+        data: [105, 110, 108, 112, 109, 111],
+        borderColor: 'rgba(255, 99, 132, 0.8)',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const pieData = {
+    labels: ['HDL', 'LDL', 'Triglycerides'],
+    datasets: [
+      {
+        label: 'Cholesterol Breakdown',
+        data: [50, 120, 60],
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(255, 206, 86, 0.7)'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const radarData = {
+    labels: ['Diet', 'Exercise', 'Sleep', 'Stress', 'Hydration'],
+    datasets: [
+      {
+        label: 'Lifestyle Score',
+        data: [7, 6, 8, 5, 7],
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        borderColor: 'rgba(75,192,192,1)',
+        pointBackgroundColor: 'rgba(75,192,192,1)',
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Health Metrics Comparison' },
+    },
+  };
+
+  const lineOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Blood Sugar Trend (6 months)' },
+    },
+  };
+
+  const pieOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Cholesterol Breakdown' },
+    },
+  };
+
+  const radarOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Lifestyle Assessment' },
+    },
+  };
+
+  // Download PDF handler
+  const handleDownloadPDF = async () => {
+    const reportElement = document.getElementById('health-report-section');
+    if (!reportElement) return;
+    const canvas = await html2canvas(reportElement, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pageWidth - 40;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+    pdf.save('health_report.pdf');
+  };
+
+  // Handle message sending (for chat bot)
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
 
@@ -67,60 +216,44 @@ function HealthcareAI({ extractedText, triggerReportGen }) {
 
     setMessages([...messages, userMessage]);
     setNewMessage("");
-
-    // Show typing indicator
     setIsTyping(true);
 
-    // Simulate bot response after a short delay
-    setTimeout(() => {
-      setIsTyping(false);
-
-      // Combine all extracted text for the prompt
-      const combinedText = Object.entries(extractedText || {})
-        .filter(([_, value]) => value && value.length > 0)
-        .map(([key, value]) => `${key}:\n${value}`)
-        .join('\n\n');
-
-      const prompt = `
-You are a healthcare analyst chatbot. Based strictly on the provided user input and extracted medical documents, generate a health assessment report in JSON format. 
-Respond ONLY with a valid JSON object matching the structure below. Do not include any extra text, explanations, or formatting.
-
-Required JSON fields:
-{
-  "name": "",
-  "age": "",
-  "gender": "",
-  "report_date": "",
-  "health_summary": "",
-  "primary_concerns": "",
-  "allergies": ""
-}
-
-User Input (extracted from uploaded medical documents):
-${combinedText}
-
-Sample Response:
-{
-  "name": "John Doe",
-  "age": "45",
-  "gender": "Male",
-  "report_date": "2024-06-07",
-  "health_summary": "John is in generally good health, but his recent blood test shows slightly elevated cholesterol. His blood sugar and other parameters are within normal range.",
-  "primary_concerns": "Elevated cholesterol, mild hypertension.",
-  "allergies": "No known allergies."
-}
-
-Only use the information provided in the user input. Do not invent or assume any details not present in the input. Respond ONLY with the JSON object.
-`;
-
-      const botMessage = {
-        id: messages.length + 2,
-        text: `I'm analyzing your input.\n\n---\nHere is the extracted text from your uploaded files:\n${combinedText ? combinedText : 'No files uploaded or extracted.'}`,
-        sender: "bot",
-        time: getCurrentTime()
-      };
-      setMessages(prev => [...prev, botMessage]);
-    }, 2000);
+    // Call Gemini API for chat bot
+    const prompt = `You are an AI health assistant. Built a proper conversation with the user. ask user step by step what's his or her problem. Ask one question at a time. Answer the user's health-related question in a helpful, friendly, and professional manner. Reply shortly and to the point.\n\nUser: ${newMessage}`;
+    fetch(GEMINI_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          { parts: [{ text: prompt }] }
+        ]
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        let geminiText = '';
+        try {
+          geminiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
+        } catch (e) {
+          geminiText = 'Sorry, I could not generate a response.';
+        }
+        setIsTyping(false);
+        setMessages(prev => ([...prev, {
+          id: prev.length + 1,
+          text: geminiText,
+          sender: 'bot',
+          time: getCurrentTime()
+        }]));
+      })
+      .catch(() => {
+        setIsTyping(false);
+        setMessages(prev => ([...prev, {
+          id: prev.length + 1,
+          text: 'Sorry, there was an error connecting to the AI doctor.',
+          sender: 'bot',
+          time: getCurrentTime()
+        }]));
+      });
   };
 
   // Handle key press (Enter to send)
@@ -130,137 +263,84 @@ Only use the information provided in the user input. Do not invent or assume any
     }
   };
 
-  // Gemini API call
-  const GEMINI_API_KEY = 'AIzaSyBpbtlJwRWNLlqJmJpKJBo34O_A5AzKKLw';
-  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+  function parseQuestionsFromMessage(message) {
+    // This regex matches lines starting with a number and a dot (e.g., "1. ...")
+    const questionRegex = /\d+\.\s*\*\*(.*?)\*\*\s*\((.*?)\)|\d+\.\s*\*\*(.*?)\*\*|(\d+\.\s*.+?)(?=\d+\.|$)/gs;
+    const matches = [];
+    let match;
 
-  useEffect(() => {
-    if (triggerReportGen > 0) {
-      // Combine all extracted text for the prompt
-      const combinedText = Object.entries(extractedText || {})
-        .filter(([_, value]) => value && value.length > 0)
-        .map(([key, value]) => `${key}:\n${value}`)
-        .join('\n\n');
-      if (!combinedText) return;
-      setLoadingReport(true);
-      const prompt = `
-You are a healthcare analyst chatbot. Based strictly on the provided user input and extracted medical documents, generate a health assessment report in JSON format. 
-Respond ONLY with a valid JSON object matching the structure below. Do not include any extra text, explanations, or formatting.
-
-Required JSON fields:
-{
-  "name": "",
-  "age": "",
-  "gender": "",
-  "report_date": "",
-  "health_summary": "",
-  "primary_concerns": "",
-  "allergies": ""
-}
-
-User Input (extracted from uploaded medical documents):
-${combinedText}
-
-Sample Response:
-{
-  "name": "John Doe",
-  "age": "45",
-  "gender": "Male",
-  "report_date": "2024-06-07",
-  "health_summary": "John is in generally good health, but his recent blood test shows slightly elevated cholesterol. His blood sugar and other parameters are within normal range.",
-  "primary_concerns": "Elevated cholesterol, mild hypertension.",
-  "allergies": "No known allergies."
-}
-
-Only use the information provided in the user input. Do not invent or assume any details not present in the input. Respond ONLY with the JSON object.
-`;
-      fetch(GEMINI_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            { parts: [{ text: prompt }] }
-          ]
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          let geminiText = '';
-          try {
-            geminiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini.';
-            const json = JSON.parse(geminiText);
-            setReport(geminiText);
-            setMessages(prev => ([...prev, {
-              id: prev.length + 1,
-              text: '[Gemini Health Report Generated]\n' + geminiText,
-              sender: 'bot',
-              time: getCurrentTime()
-            }]));
-          } catch (e) {
-            geminiText = 'Error parsing Gemini response.';
-          }
-        })
-        .catch(() => {
-          setReport('Error calling Gemini API.');
-        })
-        .finally(() => setLoadingReport(false));
+    while ((match = questionRegex.exec(message)) !== null) {
+      // Try to extract the question text from the various possible match groups
+      const question = match[1] || match[3] || match[4];
+      if (question) {
+        matches.push(question.trim());
+      }
     }
-    // eslint-disable-next-line
-  }, [triggerReportGen]);
+    return matches;
+  }
 
   return (
     <div className="healthcare-container">
       <div className="healthcare-left">
         <h1 className="report-title">Personalized Health Report</h1>
-
-        <div className="report-header">
+        <div className="report-header" id="health-report-section">
           <div className="report-info">
             {loadingReport ? (
-              <p><em>Generating report with Gemini...</em></p>
-            ) : report ? (
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{report}</pre>
-            ) : (
+              <p><em>Generating report...</em></p>
+            ) : parsedReport ? (
               <>
-                <p><strong>Name:</strong> Kennu</p>
-                <p><strong>Age:</strong> 18</p>
-                <p><strong>Gender:</strong> Trans</p>
-                <p><strong>Report Date:</strong> 13/10/2025</p>
-                <p><strong>1. Health Summary</strong></p>
-                <p>
-                  Based on your submitted reports, here's a summary of your current health condition:
-                </p>
-                <p><strong>Primary Concern(s):</strong></p>
-                <p><strong>Allergies (if any):</strong></p>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                  <div style={{ flex: 1 }}>
+                    <h2 style={{ margin: 0 }}>{parsedReport.name}</h2>
+                    <div style={{ fontSize: 16, color: '#444' }}>
+                      <span>Age: {parsedReport.age}</span> | <span>Gender: {parsedReport.gender}</span>
+                    </div>
+                    <div style={{ fontSize: 15, color: '#666', marginTop: 4 }}>Report Date: {parsedReport.report_date}</div>
+                  </div>
+                  <div className="report-avatar">
+                    <img
+                      src={parsedReport.gender && parsedReport.gender.toLowerCase() === 'female' ? femaleAvatar : maleAvatar}
+                      alt="Avatar"
+                      className="avatar"
+                      style={{ width: 80, height: 80, borderRadius: 16, objectFit: 'cover', marginLeft: 16 }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <strong>Health Summary:</strong>
+                  <div style={{ marginTop: 2 }}>{parsedReport.health_summary}</div>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <strong>Primary Concern(s):</strong>
+                  <div style={{ marginTop: 2 }}>{parsedReport.primary_concerns}</div>
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <strong>Allergies (if any):</strong>
+                  <div style={{ marginTop: 2 }}>{parsedReport.allergies}</div>
+                </div>
+                <div style={{ margin: '24px 0' }}>
+                  <Bar data={healthMetrics} options={chartOptions} />
+                </div>
+                <div style={{ margin: '24px 0' }}>
+                  <Line data={lineData} options={lineOptions} />
+                </div>
+                {/* <div style={{ margin: '24px 0' }}>
+                  <Pie data={pieData} options={pieOptions} />
+                </div>
+                <div style={{ margin: '24px 0' }}>
+                  <Radar data={radarData} options={radarOptions} />
+                </div> */}
+                <div style={{ textAlign: 'right', marginTop: 24 }}>
+                  <button onClick={handleDownloadPDF} style={{ padding: '10px 24px', background: '#6a79f5', color: 'white', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: 16, cursor: 'pointer' }}>
+                    Download PDF
+                  </button>
+                </div>
               </>
-            )}
-          </div>
-
-          <div className="report-avatar">
-            <img
-              src={picture}
-              alt="Avatar"
-              className="avatar"
-            />
+            ) : null}
           </div>
         </div>
-
-        <div className="report-table">
-          <div className="table-row header">
-            <button>Test</button>
-            <div>Your Value</div>
-            <div>Normal Range</div>
-            <div>Remarks</div>
-          </div>
-          {[...Array(4)].map((_, i) => (
-            <div className="table-row" key={i}>
-              <button>Test</button>
-              <div>Your Value</div>
-              <div>Normal Range</div>
-              <div>Remarks</div>
-            </div>
-          ))}
-        </div>
-      </div>      <div className="healthcare-right">
+      </div>
+      <div className="healthcare-right">
         <div className="chat-container">
           <div className="chat-header">
             <div className="chat-header-info">
@@ -284,16 +364,6 @@ Only use the information provided in the user input. Do not invent or assume any
                 <span></span>
                 <span></span>
                 <span></span>
-              </div>
-            )}
-
-            {/* Show image only after the specific message */}
-            {messages.length > 0 && messages[messages.length - 1].sender === "bot" && (
-              <div className="chat-image fade-in">
-                <img
-                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-                  alt="Architecture"
-                />
               </div>
             )}
 

@@ -6,8 +6,11 @@ import { IoCloudUpload } from "react-icons/io5";
 import humanImage from "./assets/image.png";
 import "./ReportContent.css";
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
+import workerSrc from 'pdfjs-dist/build/pdf.worker.js?url';
 
-function ReportMaking({ onGoBack, onTextExtracted }) {
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+
+function ReportMaking({ onGoBack, onTextExtracted, onSubmitFiles }) {
   const [fileStatus, setFileStatus] = useState({
     bloodTest: null,
     prescription: null,
@@ -15,13 +18,8 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
     allergy: null,
     bodyMeasurements: null
   });
-  const [extractedText, setExtractedText] = useState({
-    bloodTest: '',
-    prescription: '',
-    diagnosis: '',
-    allergy: '',
-    bodyMeasurements: ''
-  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const fileInputRefs = {
     bloodTest: useRef(null),
@@ -31,42 +29,35 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
     bodyMeasurements: useRef(null)
   };
 
-  const extractTextFromPDF = async (file) => {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let text = '';
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      text += content.items.map(item => item.str).join(' ') + '\n';
-    }
-    return text;
-  };
-
-  const handleFileUpload = async (event, type) => {
+  const handleFileUpload = (event, type) => {
     const file = event.target.files[0];
     if (file) {
       setFileStatus(prev => ({
         ...prev,
         [type]: file.name
       }));
-      let text = '';
-      if (file.type === 'application/pdf') {
-        text = await extractTextFromPDF(file);
-      } else {
-        // For images or other types, just set a placeholder or use OCR if needed
-        text = '[Non-PDF file uploaded: ' + file.name + ']';
-      }
-      setExtractedText(prev => ({ ...prev, [type]: text }));
-      if (onTextExtracted) {
-        onTextExtracted(type, text);
-      }
     }
+  };
+
+  const handleSubmit = async () => {
+    setError('');
+    const hasUploadedFiles = Object.values(fileStatus).some(f => f !== null);
+    if (!hasUploadedFiles) {
+      setError('Please upload at least one file before submitting.');
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      if (onSubmitFiles) onSubmitFiles();
+    }, 7000); // 7 seconds loading
   };
 
   const handleContainerClick = (type) => {
     fileInputRefs[type].current.click();
-  }; return (
+  };
+
+  return (
     <div className="report-making">
       <div className="report-making-container">
         <div className="image-section">
@@ -91,7 +82,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.bloodTest}
-                onChange={(e) => handleFileUpload(e, 'bloodTest')} 
+                onChange={(e) => handleFileUpload(e, 'bloodTest')}
                 accept=".pdf"
               />
               {fileStatus.bloodTest ? (
@@ -119,7 +110,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.prescription}
-                onChange={(e) => handleFileUpload(e, 'prescription')} 
+                onChange={(e) => handleFileUpload(e, 'prescription')}
                 accept=".pdf"
               />
               {fileStatus.prescription ? (
@@ -145,7 +136,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.diagnosis}
-                onChange={(e) => handleFileUpload(e, 'diagnosis')} 
+                onChange={(e) => handleFileUpload(e, 'diagnosis')}
                 accept=".pdf"
               />
               {fileStatus.diagnosis ? (
@@ -171,7 +162,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.allergy}
-                onChange={(e) => handleFileUpload(e, 'allergy')} 
+                onChange={(e) => handleFileUpload(e, 'allergy')}
                 accept=".pdf"
               />
               {fileStatus.allergy ? (
@@ -199,7 +190,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.bodyMeasurements}
-                onChange={(e) => handleFileUpload(e, 'bodyMeasurements')} 
+                onChange={(e) => handleFileUpload(e, 'bodyMeasurements')}
                 accept=".pdf"
               />
               {fileStatus.bodyMeasurements ? (
@@ -215,18 +206,11 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
       </div>      <div className="back-button-container">
         <button className="back-button" onClick={onGoBack}>
           <IoArrowBack /> Back to Information
-        </button>        <button className="submit-button" onClick={() => {
-          // Check if any files have been uploaded
-          const hasUploadedFiles = Object.values(fileStatus).some(status => status !== null);
-          if (hasUploadedFiles) {
-            alert('Files submitted successfully!');
-            // Here you would typically send the files to your backend
-          } else {
-            alert('Please upload at least one file before submitting.');
-          }
-        }}>
-          <IoCloudUpload /> Submit Files
         </button>
+        <button className="submit-button" onClick={handleSubmit} disabled={loading}>
+          <IoCloudUpload /> {loading ? 'Generating...' : 'Submit Files'}
+        </button>
+        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
       </div>
     </div>
   );

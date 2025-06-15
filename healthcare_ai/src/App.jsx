@@ -19,10 +19,11 @@ function App() {
     allergy: '',
     bodyMeasurements: ''
   })
+  const [triggerReportGen, setTriggerReportGen] = useState(0);
 
   const handleSendReports = () => {
     setShowReportContent(true)
-    // Scroll to the component position
+    console.log('[App] handleSendReports: Show report content');
     setTimeout(() => {
       window.scrollTo({
         top: document.getElementById('report-section').offsetTop - 100,
@@ -33,7 +34,7 @@ function App() {
 
   const handleGoBack = () => {
     setShowReportContent(false)
-    // Scroll to the component position
+    console.log('[App] handleGoBack: Back to entry');
     setTimeout(() => {
       window.scrollTo({
         top: document.getElementById('report-section').offsetTop - 100,
@@ -43,7 +44,14 @@ function App() {
   }
 
   const handleTextExtracted = (type, text) => {
+    console.log('[App] handleTextExtracted:', type, text);
     setAllExtractedText(prev => ({ ...prev, [type]: text }))
+  }
+
+  // This function will be called when user submits files
+  const handleSubmitFiles = () => {
+    setTriggerReportGen(prev => prev + 1);
+    console.log('[App] handleSubmitFiles: Trigger report generation');
   }
 
   return (
@@ -60,7 +68,7 @@ function App() {
             unmountOnExit
           >            <div ref={nodeRef}>
               {showReportContent ? (
-                <ReportMaking onGoBack={handleGoBack} onTextExtracted={handleTextExtracted} />
+                <ReportMaking onGoBack={handleGoBack} onTextExtracted={handleTextExtracted} onSubmitFiles={handleSubmitFiles} />
               ) : (
                 <ReportEntry onSendReports={handleSendReports} />
               )}
@@ -69,7 +77,7 @@ function App() {
         </SwitchTransition>
 
       </div>
-      <HealthcareAI extractedText={allExtractedText} />
+      <HealthcareAI extractedText={allExtractedText} triggerReportGen={triggerReportGen} />
       <Fotter />
 
     </div>

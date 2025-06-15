@@ -3,7 +3,7 @@ import "./ai.css";
 import picture from "./assets/picture.png";
 
 
-function HealthcareAI() {
+function HealthcareAI({ extractedText }) {
   // Sample messages array for the chat
   const [messages, setMessages] = useState([
     {
@@ -25,21 +25,21 @@ function HealthcareAI() {
       time: "02:23 AM"
     }
   ]);
-  
+
   // State for new message input
   const [newMessage, setNewMessage] = useState("");
   // State for typing indicator
   const [isTyping, setIsTyping] = useState(false);
   // Reference for auto-scrolling
   const chatContainerRef = useRef(null);
-  
+
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
-  
+
   // Function to get current time in 12-hour format
   const getCurrentTime = () => {
     const now = new Date();
@@ -50,39 +50,44 @@ function HealthcareAI() {
     hours = hours ? hours : 12; // the hour '0' should be '12'
     return `${hours}:${minutes} ${ampm}`;
   };
-  
+
   // Handle message sending
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
-    
+
     const userMessage = {
       id: messages.length + 1,
       text: newMessage,
       sender: "you",
       time: getCurrentTime()
     };
-    
+
     setMessages([...messages, userMessage]);
     setNewMessage("");
-    
+
     // Show typing indicator
     setIsTyping(true);
-    
+
     // Simulate bot response after a short delay
     setTimeout(() => {
       setIsTyping(false);
-      
+
+      // Combine all extracted text for the prompt
+      const combinedText = Object.entries(extractedText || {})
+        .filter(([_, value]) => value && value.length > 0)
+        .map(([key, value]) => `${key}:\n${value}`)
+        .join('\n\n');
+
       const botMessage = {
         id: messages.length + 2,
-        text: "I'm analyzing your input. Let me provide you with a relevant health response shortly.",
+        text: `I'm analyzing your input.\n\n---\nHere is the extracted text from your uploaded files:\n${combinedText ? combinedText : 'No files uploaded or extracted.'}`,
         sender: "bot",
         time: getCurrentTime()
       };
-      
       setMessages(prev => [...prev, botMessage]);
     }, 2000);
   };
-  
+
   // Handle key press (Enter to send)
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -103,7 +108,7 @@ function HealthcareAI() {
             <p><strong>Report Date:</strong> 13/10/2025</p>
             <p><strong>1. Health Summary</strong></p>
             <p>
-              Based on your submitted reports, here’s a summary of your current health condition:
+              Based on your submitted reports, here's a summary of your current health condition:
             </p>
             <p><strong>Primary Concern(s):</strong></p>
             <p><strong>Allergies (if any):</strong></p>
@@ -142,7 +147,7 @@ function HealthcareAI() {
               <span className="status">Online</span>
             </div>
           </div>
-            <div className="chat-messages" ref={chatContainerRef}>
+          <div className="chat-messages" ref={chatContainerRef}>
             {messages.map((msg) => (
               <div key={msg.id} className={`chat-msg ${msg.sender}`}>
                 <div className="chat-bubble">
@@ -151,7 +156,7 @@ function HealthcareAI() {
                 <span className="time">{msg.time}</span>
               </div>
             ))}
-            
+
             {/* Show typing indicator when bot is "typing" */}
             {isTyping && (
               <div className="typing-indicator">
@@ -160,13 +165,13 @@ function HealthcareAI() {
                 <span></span>
               </div>
             )}
-            
+
             {/* Show image only after the specific message */}
             {messages.length > 0 && messages[messages.length - 1].sender === "bot" && (
               <div className="chat-image fade-in">
-                <img 
-                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" 
-                  alt="Architecture" 
+                <img
+                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+                  alt="Architecture"
                 />
               </div>
             )}

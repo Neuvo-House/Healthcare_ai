@@ -12,7 +12,14 @@ import './App.css'
 function App() {
   const [showReportContent, setShowReportContent] = useState(false)
   const nodeRef = useRef(null)
-  
+  const [allExtractedText, setAllExtractedText] = useState({
+    bloodTest: '',
+    prescription: '',
+    diagnosis: '',
+    allergy: '',
+    bodyMeasurements: ''
+  })
+
   const handleSendReports = () => {
     setShowReportContent(true)
     // Scroll to the component position
@@ -23,7 +30,7 @@ function App() {
       })
     }, 100)
   }
-  
+
   const handleGoBack = () => {
     setShowReportContent(false)
     // Scroll to the component position
@@ -33,6 +40,10 @@ function App() {
         behavior: 'smooth'
       })
     }, 100)
+  }
+
+  const handleTextExtracted = (type, text) => {
+    setAllExtractedText(prev => ({ ...prev, [type]: text }))
   }
 
   return (
@@ -49,7 +60,7 @@ function App() {
             unmountOnExit
           >            <div ref={nodeRef}>
               {showReportContent ? (
-                <ReportMaking onGoBack={handleGoBack} />
+                <ReportMaking onGoBack={handleGoBack} onTextExtracted={handleTextExtracted} />
               ) : (
                 <ReportEntry onSendReports={handleSendReports} />
               )}
@@ -58,9 +69,9 @@ function App() {
         </SwitchTransition>
 
       </div>
-      <HealthcareAI/>
+      <HealthcareAI extractedText={allExtractedText} />
       <Fotter />
-      
+
     </div>
   )
 }

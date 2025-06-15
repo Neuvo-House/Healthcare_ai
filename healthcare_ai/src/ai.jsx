@@ -280,10 +280,9 @@ function HealthcareAI({ extractedText, triggerReportGen }) {
   }
 
   return (
-    <div className="healthcare-container">
-      <div className="healthcare-left">
+    <div className="healthcare-container">      <div className="healthcare-left" id="health-report-section">
         <h1 className="report-title">Personalized Health Report</h1>
-        <div className="report-header" id="health-report-section">
+        <div className="report-header">
           <div className="report-info">
             {loadingReport ? (
               <p><em>Generating report...</em></p>

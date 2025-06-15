@@ -53,12 +53,14 @@ function App() {
     setTriggerReportGen(prev => prev + 1);
     console.log('[App] handleSubmitFiles: Trigger report generation');
   }
-
+  
   return (
     <div className="main-container">
       <Navbar />
-      <Hero />
-      <div id="report-section">
+      <div id="home-section" style={{ paddingTop: '100px', minHeight: '100vh' }}>
+        <Hero />
+      </div>
+      <div id="report-section" style={{ marginTop: '-200px', minHeight: '100vh' }}>
         <SwitchTransition mode="out-in">
           <CSSTransition
             key={showReportContent ? 'report-content' : 'report-entry'}
@@ -76,8 +78,9 @@ function App() {
           </CSSTransition>
         </SwitchTransition>
 
+      </div>      <div id="chatbox-section" style={{ paddingTop: '100px', minHeight: '100vh' }}>
+        <HealthcareAI extractedText={allExtractedText} triggerReportGen={triggerReportGen} />
       </div>
-      <HealthcareAI extractedText={allExtractedText} triggerReportGen={triggerReportGen} />
       <Fotter />
 
     </div>

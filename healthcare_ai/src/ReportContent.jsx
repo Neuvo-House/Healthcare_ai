@@ -60,7 +60,7 @@ function ReportMaking({ onGoBack }) {
                 hidden 
                 ref={fileInputRefs.bloodTest}
                 onChange={(e) => handleFileUpload(e, 'bloodTest')} 
-                accept=".pdf,.jpg,.jpeg,.png"
+                accept=".pdf"
               />
               {fileStatus.bloodTest ? (
                 <>
@@ -88,7 +88,7 @@ function ReportMaking({ onGoBack }) {
                 hidden 
                 ref={fileInputRefs.prescription}
                 onChange={(e) => handleFileUpload(e, 'prescription')} 
-                accept=".pdf,.jpg,.jpeg,.png"
+                accept=".pdf"
               />
               {fileStatus.prescription ? (
                 <>
@@ -114,7 +114,7 @@ function ReportMaking({ onGoBack }) {
                 hidden 
                 ref={fileInputRefs.diagnosis}
                 onChange={(e) => handleFileUpload(e, 'diagnosis')} 
-                accept=".pdf,.jpg,.jpeg,.png"
+                accept=".pdf"
               />
               {fileStatus.diagnosis ? (
                 <>
@@ -140,7 +140,7 @@ function ReportMaking({ onGoBack }) {
                 hidden 
                 ref={fileInputRefs.allergy}
                 onChange={(e) => handleFileUpload(e, 'allergy')} 
-                accept=".pdf,.jpg,.jpeg,.png"
+                accept=".pdf"
               />
               {fileStatus.allergy ? (
                 <>
@@ -168,7 +168,7 @@ function ReportMaking({ onGoBack }) {
                 hidden 
                 ref={fileInputRefs.bodyMeasurements}
                 onChange={(e) => handleFileUpload(e, 'bodyMeasurements')} 
-                accept=".pdf,.jpg,.jpeg,.png"
+                accept=".pdf"
               />
               {fileStatus.bodyMeasurements ? (
                 <>

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import ReportEntry from './ReportEntry'
 import Hero from './Hero'
+import AI from './ai'
 import Fotter from './fotter'
 import Navbar from './Navbar'
 import ReportMaking from './ReportContent'
@@ -56,8 +57,9 @@ function App() {
           </CSSTransition>
         </SwitchTransition>
       </div>
+      <AI />
       <Fotter />
-      
+
     </div>
   )
 }

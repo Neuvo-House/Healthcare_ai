@@ -3,7 +3,7 @@ import "./ai.css";
 import picture from "./assets/picture.png";
 
 
-function HealthcareAI({ extractedText }) {
+function HealthcareAI({ extractedText, triggerReportGen }) {
   // Sample messages array for the chat
   const [messages, setMessages] = useState([
     {
@@ -32,6 +32,9 @@ function HealthcareAI({ extractedText }) {
   const [isTyping, setIsTyping] = useState(false);
   // Reference for auto-scrolling
   const chatContainerRef = useRef(null);
+
+  const [report, setReport] = useState('');
+  const [loadingReport, setLoadingReport] = useState(false);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -78,6 +81,38 @@ function HealthcareAI({ extractedText }) {
         .map(([key, value]) => `${key}:\n${value}`)
         .join('\n\n');
 
+      const prompt = `
+You are a healthcare analyst chatbot. Based strictly on the provided user input and extracted medical documents, generate a health assessment report in JSON format. 
+Respond ONLY with a valid JSON object matching the structure below. Do not include any extra text, explanations, or formatting.
+
+Required JSON fields:
+{
+  "name": "",
+  "age": "",
+  "gender": "",
+  "report_date": "",
+  "health_summary": "",
+  "primary_concerns": "",
+  "allergies": ""
+}
+
+User Input (extracted from uploaded medical documents):
+${combinedText}
+
+Sample Response:
+{
+  "name": "John Doe",
+  "age": "45",
+  "gender": "Male",
+  "report_date": "2024-06-07",
+  "health_summary": "John is in generally good health, but his recent blood test shows slightly elevated cholesterol. His blood sugar and other parameters are within normal range.",
+  "primary_concerns": "Elevated cholesterol, mild hypertension.",
+  "allergies": "No known allergies."
+}
+
+Only use the information provided in the user input. Do not invent or assume any details not present in the input. Respond ONLY with the JSON object.
+`;
+
       const botMessage = {
         id: messages.length + 2,
         text: `I'm analyzing your input.\n\n---\nHere is the extracted text from your uploaded files:\n${combinedText ? combinedText : 'No files uploaded or extracted.'}`,
@@ -95,6 +130,84 @@ function HealthcareAI({ extractedText }) {
     }
   };
 
+  // Gemini API call
+  const GEMINI_API_KEY = 'AIzaSyBpbtlJwRWNLlqJmJpKJBo34O_A5AzKKLw';
+  const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+  useEffect(() => {
+    if (triggerReportGen > 0) {
+      // Combine all extracted text for the prompt
+      const combinedText = Object.entries(extractedText || {})
+        .filter(([_, value]) => value && value.length > 0)
+        .map(([key, value]) => `${key}:\n${value}`)
+        .join('\n\n');
+      if (!combinedText) return;
+      setLoadingReport(true);
+      const prompt = `
+You are a healthcare analyst chatbot. Based strictly on the provided user input and extracted medical documents, generate a health assessment report in JSON format. 
+Respond ONLY with a valid JSON object matching the structure below. Do not include any extra text, explanations, or formatting.
+
+Required JSON fields:
+{
+  "name": "",
+  "age": "",
+  "gender": "",
+  "report_date": "",
+  "health_summary": "",
+  "primary_concerns": "",
+  "allergies": ""
+}
+
+User Input (extracted from uploaded medical documents):
+${combinedText}
+
+Sample Response:
+{
+  "name": "John Doe",
+  "age": "45",
+  "gender": "Male",
+  "report_date": "2024-06-07",
+  "health_summary": "John is in generally good health, but his recent blood test shows slightly elevated cholesterol. His blood sugar and other parameters are within normal range.",
+  "primary_concerns": "Elevated cholesterol, mild hypertension.",
+  "allergies": "No known allergies."
+}
+
+Only use the information provided in the user input. Do not invent or assume any details not present in the input. Respond ONLY with the JSON object.
+`;
+      fetch(GEMINI_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            { parts: [{ text: prompt }] }
+          ]
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          let geminiText = '';
+          try {
+            geminiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini.';
+            const json = JSON.parse(geminiText);
+            setReport(geminiText);
+            setMessages(prev => ([...prev, {
+              id: prev.length + 1,
+              text: '[Gemini Health Report Generated]\n' + geminiText,
+              sender: 'bot',
+              time: getCurrentTime()
+            }]));
+          } catch (e) {
+            geminiText = 'Error parsing Gemini response.';
+          }
+        })
+        .catch(() => {
+          setReport('Error calling Gemini API.');
+        })
+        .finally(() => setLoadingReport(false));
+    }
+    // eslint-disable-next-line
+  }, [triggerReportGen]);
+
   return (
     <div className="healthcare-container">
       <div className="healthcare-left">
@@ -102,16 +215,24 @@ function HealthcareAI({ extractedText }) {
 
         <div className="report-header">
           <div className="report-info">
-            <p><strong>Name:</strong> Kennu</p>
-            <p><strong>Age:</strong> 18</p>
-            <p><strong>Gender:</strong> Trans</p>
-            <p><strong>Report Date:</strong> 13/10/2025</p>
-            <p><strong>1. Health Summary</strong></p>
-            <p>
-              Based on your submitted reports, here's a summary of your current health condition:
-            </p>
-            <p><strong>Primary Concern(s):</strong></p>
-            <p><strong>Allergies (if any):</strong></p>
+            {loadingReport ? (
+              <p><em>Generating report with Gemini...</em></p>
+            ) : report ? (
+              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{report}</pre>
+            ) : (
+              <>
+                <p><strong>Name:</strong> Kennu</p>
+                <p><strong>Age:</strong> 18</p>
+                <p><strong>Gender:</strong> Trans</p>
+                <p><strong>Report Date:</strong> 13/10/2025</p>
+                <p><strong>1. Health Summary</strong></p>
+                <p>
+                  Based on your submitted reports, here's a summary of your current health condition:
+                </p>
+                <p><strong>Primary Concern(s):</strong></p>
+                <p><strong>Allergies (if any):</strong></p>
+              </>
+            )}
           </div>
 
           <div className="report-avatar">

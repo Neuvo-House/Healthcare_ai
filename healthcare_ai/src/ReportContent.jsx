@@ -7,7 +7,7 @@ import humanImage from "./assets/image.png";
 import "./ReportContent.css";
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 
-function ReportMaking({ onGoBack, onTextExtracted }) {
+function ReportMaking({ onGoBack, onTextExtracted, onSubmitFiles }) {
   const [fileStatus, setFileStatus] = useState({
     bloodTest: null,
     prescription: null,
@@ -66,7 +66,9 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
 
   const handleContainerClick = (type) => {
     fileInputRefs[type].current.click();
-  }; return (
+  };
+
+  return (
     <div className="report-making">
       <div className="report-making-container">
         <div className="image-section">
@@ -91,7 +93,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.bloodTest}
-                onChange={(e) => handleFileUpload(e, 'bloodTest')} 
+                onChange={(e) => handleFileUpload(e, 'bloodTest')}
                 accept=".pdf"
               />
               {fileStatus.bloodTest ? (
@@ -119,7 +121,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.prescription}
-                onChange={(e) => handleFileUpload(e, 'prescription')} 
+                onChange={(e) => handleFileUpload(e, 'prescription')}
                 accept=".pdf"
               />
               {fileStatus.prescription ? (
@@ -145,7 +147,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.diagnosis}
-                onChange={(e) => handleFileUpload(e, 'diagnosis')} 
+                onChange={(e) => handleFileUpload(e, 'diagnosis')}
                 accept=".pdf"
               />
               {fileStatus.diagnosis ? (
@@ -171,7 +173,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.allergy}
-                onChange={(e) => handleFileUpload(e, 'allergy')} 
+                onChange={(e) => handleFileUpload(e, 'allergy')}
                 accept=".pdf"
               />
               {fileStatus.allergy ? (
@@ -199,7 +201,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
                 type="file"
                 hidden
                 ref={fileInputRefs.bodyMeasurements}
-                onChange={(e) => handleFileUpload(e, 'bodyMeasurements')} 
+                onChange={(e) => handleFileUpload(e, 'bodyMeasurements')}
                 accept=".pdf"
               />
               {fileStatus.bodyMeasurements ? (
@@ -220,7 +222,7 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
           const hasUploadedFiles = Object.values(fileStatus).some(status => status !== null);
           if (hasUploadedFiles) {
             alert('Files submitted successfully!');
-            // Here you would typically send the files to your backend
+            if (onSubmitFiles) onSubmitFiles();
           } else {
             alert('Please upload at least one file before submitting.');
           }

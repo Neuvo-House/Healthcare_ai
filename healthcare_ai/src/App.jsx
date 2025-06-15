@@ -19,6 +19,7 @@ function App() {
     allergy: '',
     bodyMeasurements: ''
   })
+  const [triggerReportGen, setTriggerReportGen] = useState(0);
 
   const handleSendReports = () => {
     setShowReportContent(true)
@@ -46,6 +47,11 @@ function App() {
     setAllExtractedText(prev => ({ ...prev, [type]: text }))
   }
 
+  // This function will be called when user submits files
+  const handleSubmitFiles = () => {
+    setTriggerReportGen(prev => prev + 1); // increment to trigger effect in ai.jsx
+  }
+
   return (
     <div className="main-container">
       <Navbar />
@@ -60,7 +66,7 @@ function App() {
             unmountOnExit
           >            <div ref={nodeRef}>
               {showReportContent ? (
-                <ReportMaking onGoBack={handleGoBack} onTextExtracted={handleTextExtracted} />
+                <ReportMaking onGoBack={handleGoBack} onTextExtracted={handleTextExtracted} onSubmitFiles={handleSubmitFiles} />
               ) : (
                 <ReportEntry onSendReports={handleSendReports} />
               )}
@@ -69,7 +75,7 @@ function App() {
         </SwitchTransition>
 
       </div>
-      <HealthcareAI extractedText={allExtractedText} />
+      <HealthcareAI extractedText={allExtractedText} triggerReportGen={triggerReportGen} />
       <Fotter />
 
     </div>

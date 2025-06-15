@@ -774,7 +774,7 @@ html {
 /* Back button styling */
 .back-button-container {
   padding: 20px 0 10px;
-  margin-top: -80px;
+  margin-top: -230px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -833,12 +833,13 @@ html {
 
 @media (prefers-color-scheme: dark) {
   .back-button {
-    border-color: rgba(255, 255, 255, 0.8);
-    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.8);
+    color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(8px);
   }
   
   .back-button:hover {
-    border-color: rgba(255, 255, 255, 1);
+    border-color: rgb(0, 0, 0);
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
   }
   

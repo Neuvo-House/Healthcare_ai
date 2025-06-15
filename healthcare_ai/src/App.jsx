@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react'
 import ReportEntry from './ReportEntry'
 import Hero from './Hero'
-import Fotter from './fotter'
+import ai from './ai'
+import Footer from './footer.jsx'
 import Navbar from './Navbar'
 import ReportMaking from './ReportContent'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
@@ -55,8 +56,10 @@ function App() {
             </div>
           </CSSTransition>
         </SwitchTransition>
+
       </div>
-      <Fotter />
+
+      <Footer />
       
     </div>
   )

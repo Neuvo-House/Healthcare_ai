@@ -14,8 +14,8 @@ function Footer() {
                 </div>
             </div>
             <div className="bottom">
-                <div class="bottom-container">
-                    <div class="box">
+                <div className="bottom-container">
+                    <div className="box">
                         <ul>
                              <h3>Quick Links</h3>
                             <li>Home</li>
@@ -23,15 +23,15 @@ function Footer() {
                             <li>Pricing</li>
                         </ul>
                     </div>
-                    <div class="box">
+                    <div className="box">
                         <h3>Socials</h3>
                         <ul>
-                            <li>Instagram</li>
-                            <li>Facebook</li>
-                            <li>LinkedIn</li>
+                            <li><a href="https://www.instagram.com/neuvohaus/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                            <li><a href="https://github.com/Neuvo-House/Healthcare_ai" target="_blank" rel="noopener noreferrer">Github</a></li>
+                            <li><a href="https://www.linkedin.com/company/neuvohaus/about/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                         </ul>
                     </div>
-                    <div class="box">
+                    <div className="box">
                         <h3> Legals</h3>
                         <ul>
                             <li>Privacy Policy</li>

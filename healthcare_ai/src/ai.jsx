@@ -219,7 +219,7 @@ function HealthcareAI({ extractedText, triggerReportGen }) {
     setIsTyping(true);
 
     // Call Gemini API for chat bot
-    const prompt = `You are an AI health assistant. Built a proper conversation with the user. ask user step by step what's his or her problem. Ask one question at a time. Answer the user's health-related question in a helpful, friendly, and professional manner. Reply shortly and to the point.\n\nUser: ${newMessage}`;
+    const prompt = `You are an AI health assistant.Your name is "MediNuvo". Built a proper conversation with the user. ask user step by step what's his or her problem. Ask one question at a time. Answer the user's health-related question in a helpful, friendly, and professional manner. Reply shortly and to the point.\n\nUser: ${newMessage}`;
     fetch(GEMINI_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

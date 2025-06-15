@@ -16,9 +16,9 @@ function Navbar() {
         </div>
         <div className={`middle-container ${menuActive ? 'active' : ''}`}>
           <div className="navbar-content">Home</div>
-          <div className="navbar-content">About us</div>
-          <div className="navbar-content">Pricing</div>
-          <div className="navbar-content">Healthcare</div>
+          <div className="navbar-content">Report content</div>
+          <div className="navbar-content">Report</div>
+          <div className="navbar-content">Chatbox</div>
         </div>
         <div className="right-container">
           <div className="menu-toggle" onClick={toggleMenu}>

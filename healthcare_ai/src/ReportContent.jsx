@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { IoArrowBack } from "react-icons/io5";
+import { IoCloudUpload } from "react-icons/io5";
 import humanImage from "./assets/image.png";
 import "./ReportContent.css";
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
@@ -211,10 +212,20 @@ function ReportMaking({ onGoBack, onTextExtracted }) {
               )}            </div>
           </div>
         </div>
-      </div>
-      <div className="back-button-container">
-        <button className="back-button" onClick={onGoBack} >
+      </div>      <div className="back-button-container">
+        <button className="back-button" onClick={onGoBack}>
           <IoArrowBack /> Back to Information
+        </button>        <button className="submit-button" onClick={() => {
+          // Check if any files have been uploaded
+          const hasUploadedFiles = Object.values(fileStatus).some(status => status !== null);
+          if (hasUploadedFiles) {
+            alert('Files submitted successfully!');
+            // Here you would typically send the files to your backend
+          } else {
+            alert('Please upload at least one file before submitting.');
+          }
+        }}>
+          <IoCloudUpload /> Submit Files
         </button>
       </div>
     </div>

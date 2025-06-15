@@ -139,7 +139,8 @@ function HealthcareAI({ extractedText }) {
             </div>
           ))}
         </div>
-      </div>      <div className="healthcare-right">
+      </div>      
+      <div className="healthcare-right">
         <div className="chat-container">
           <div className="chat-header">
             <div className="chat-header-info">

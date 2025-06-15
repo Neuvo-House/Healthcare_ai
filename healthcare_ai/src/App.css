@@ -9,6 +9,8 @@
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
+    animation: containerFadeIn 1s ease-out forwards, borderPulse 4s infinite ease-in-out;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Responsive breakpoints */
@@ -69,6 +71,7 @@
   position: relative;
   min-height: 500px;
   width: 100%;
+  margin-top: -200px;
 }
 
 .fade-enter {
@@ -97,7 +100,7 @@
 .send-reports-btn {
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .send-reports-btn::after {
@@ -132,5 +135,26 @@
 @media screen and (max-width: 480px) {
   #report-section {
     min-height: 350px;
+  }
+}
+
+/* Add more advanced animations */
+@keyframes borderPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes containerFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

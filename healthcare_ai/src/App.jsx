@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react'
 import ReportEntry from './ReportEntry'
 import Hero from './Hero'
-import Fotter from './fotter'
+import Fotter from './footer'
 import Navbar from './Navbar'
 import ReportMaking from './ReportContent'
+import HealthcareAI from './ai'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 
 import './App.css'
@@ -57,6 +58,7 @@ function App() {
         </SwitchTransition>
 
       </div>
+      <HealthcareAI/>
       <Fotter />
       
     </div>
